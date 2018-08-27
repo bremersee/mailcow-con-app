@@ -562,7 +562,7 @@
         <configuration>
           <skip>${dockerfile.skip}</skip>
           <useMavenSettingsForAuth>true</useMavenSettingsForAuth>
-          <repository>docker.io/bremersee/authman</repository>
+          <repository>docker.io/bremersee/mailcow-connector</repository>
           <tag>latest</tag>
           <buildArgs>
             <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
