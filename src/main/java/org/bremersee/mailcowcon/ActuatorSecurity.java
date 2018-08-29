@@ -19,13 +19,13 @@ package org.bremersee.mailcowcon;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
+import org.springframework.boot.actuate.health.HealthEndpoint;
+import org.springframework.boot.actuate.info.InfoEndpoint;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -39,34 +39,28 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
  */
 @Order(101)
 @Configuration
-@EnableConfigurationProperties(AccessProperties.class)
+@EnableConfigurationProperties(ActuatorSecurityProperties.class)
 @Slf4j
 public class ActuatorSecurity extends WebSecurityConfigurerAdapter {
 
-  private final AccessProperties properties;
+  private final ActuatorSecurityProperties properties;
 
   @Autowired
-  public ActuatorSecurity(AccessProperties properties) {
+  public ActuatorSecurity(ActuatorSecurityProperties properties) {
     this.properties = properties;
-  }
-
-  @Override
-  public void configure(WebSecurity web) {
-    web.ignoring().antMatchers("/h2-console");
   }
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http
         .requestMatcher(EndpointRequest.toAnyEndpoint())
-        .userDetailsService(userDetailsService())
         .csrf().disable()
         .httpBasic().realmName("actuator")
         .and()
         .requestMatcher(EndpointRequest.toAnyEndpoint())
         .authorizeRequests()
-        .antMatchers(HttpMethod.GET, "/actuator/health").permitAll()
-        .antMatchers(HttpMethod.GET, "/actuator/info").permitAll()
+        .requestMatchers(EndpointRequest.to(HealthEndpoint.class)).permitAll()
+        .requestMatchers(EndpointRequest.to(InfoEndpoint.class)).permitAll()
         .anyRequest()
         .access(properties.buildAccess());
   }
@@ -81,8 +75,7 @@ public class ActuatorSecurity extends WebSecurityConfigurerAdapter {
         simpleUser -> User.builder()
             .username(simpleUser.getName())
             .password(simpleUser.getPassword())
-            .authorities(
-                simpleUser.getAuthorities().toArray(new String[0]))
+            .authorities(simpleUser.buildAuthorities())
             .passwordEncoder(encoder::encode)
             .build())
         .toArray(UserDetails[]::new);
