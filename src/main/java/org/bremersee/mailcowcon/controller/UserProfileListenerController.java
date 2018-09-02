@@ -138,6 +138,7 @@ public class UserProfileListenerController implements UserProfileListenerApi {
       @PathVariable("userName") String userName,
       @Valid @RequestBody NewPassword newPassword) {
 
+    log.info("msg=[Got new password event.] user=[{}]", userName);
     mailboxRepository
         .findByUserName(buildUserName(userName))
         .ifPresent(mailbox -> {
