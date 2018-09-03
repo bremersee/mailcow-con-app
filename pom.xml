@@ -555,4 +555,13 @@
     </plugins>
   </build>
 
+  <profiles>
+    <profile>
+      <id>dockerfile</id>
+      <properties>
+        <dockerfile.skip>false</dockerfile.skip>
+      </properties>
+    </profile>
+  </profiles>
+
 </project>
