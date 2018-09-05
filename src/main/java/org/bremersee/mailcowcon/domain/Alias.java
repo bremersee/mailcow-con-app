@@ -53,6 +53,7 @@ import org.hibernate.annotations.Type;
 @EqualsAndHashCode(of = "address")
 @Entity
 @Table(name = "alias", indexes = {@Index(columnList = "domain")})
+@SuppressWarnings("WeakerAccess")
 public class Alias implements Serializable {
 
   private static final long serialVersionUID = -4340013012371533080L;

@@ -51,6 +51,7 @@ import lombok.ToString;
 @EqualsAndHashCode(of = "domain")
 @Entity
 @Table(name = "domain")
+@SuppressWarnings("WeakerAccess")
 public class Domain implements Serializable {
 
   private static final long serialVersionUID = -3642500186695075504L;

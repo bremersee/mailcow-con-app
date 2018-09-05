@@ -50,6 +50,7 @@ import lombok.ToString;
 @EqualsAndHashCode(of = "userName")
 @Entity
 @Table(name = "domain_admins")
+@SuppressWarnings("WeakerAccess")
 public class DomainAdmin {
 
   @JsonProperty(value = "userName", required = true)

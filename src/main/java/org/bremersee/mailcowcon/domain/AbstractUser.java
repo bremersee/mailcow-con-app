@@ -61,6 +61,7 @@ import lombok.ToString;
 @ToString(exclude = "password")
 @EqualsAndHashCode(of = "userName")
 @MappedSuperclass
+@SuppressWarnings("WeakerAccess")
 public abstract class AbstractUser implements Serializable {
 
   private static final long serialVersionUID = 7620309360467915410L;

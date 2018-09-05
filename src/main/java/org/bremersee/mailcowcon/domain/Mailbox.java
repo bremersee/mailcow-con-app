@@ -29,6 +29,7 @@ import javax.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.Type;
 
 /**
  * @author Christian Bremer
@@ -71,14 +72,6 @@ public class Mailbox extends AbstractUser {
   @Column(name = "domain", nullable = false)
   private String domain;
 
-  @JsonProperty(value = "tlsEnforceIn", defaultValue = "false")
-  @Column(name = "tls_enforce_in", nullable = false)
-  private boolean tlsEnforceIn;
-
-  @JsonProperty(value = "tlsEnforceOut", defaultValue = "false")
-  @Column(name = "tls_enforce_out", nullable = false)
-  private boolean tlsEnforceOut;
-
   @JsonProperty(value = "kind", defaultValue = "")
   @Column(name = "kind", nullable = false, length = 100)
   private String kind = "";
@@ -87,9 +80,10 @@ public class Mailbox extends AbstractUser {
   @Column(name = "multiple_bookings", nullable = false)
   private boolean multipleBookings;
 
-  @JsonProperty(value = "wantsTaggedSubject", defaultValue = "false")
-  @Column(name = "wants_tagged_subject", nullable = false)
-  private boolean wantsTaggedSubject;
+  @JsonProperty(value = "attributes")
+  @Column(name = "attributes")
+  @Type(type = "text")
+  private String attributes;
 
   public Mailbox() {
     setUserType(UserType.USER);
